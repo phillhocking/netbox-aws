@@ -1,8 +1,3 @@
-# Get local machine's IP
-data "http" "my-ip" {
-  url = "http://icanhazip.com"
-}
-
 resource "aws_security_group" "netbox-prod" {
   name        = "netbox-prod"
   description = "Allow SSH inbound , all HTTP inbound, and all outbound traffic"
@@ -11,7 +6,7 @@ resource "aws_security_group" "netbox-prod" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(data.http.my-ip.body)}/32"]
+    cidr_blocks = ["${var.management_cidr_block}"]
   }
 
   ingress {
