@@ -25,7 +25,7 @@ resource "aws_instance" "netbox" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   key_name      = var.key_name
-
+  vpc_security_group_ids = [aws_security_group.netbox-prod.id]
   tags = {
     Name = "netbox-prod"
   }
