@@ -31,6 +31,19 @@ resource "aws_instance" "netbox" {
   }
 }
 
+resource "null_resource" "saltmaster_config" {
+ depends_on = [aws_instance.netbox]
+ connection {
+    type		= "ssh"
+    private_key         = var.terraform_ssh_key
+    host                = aws_instance.netbox.public_ip
+    user              	= "ubuntu"
+    timeout             = "4m"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
  provisioner "remote-exec" {
    inline = [ "sudo apt update",
               "sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y",
@@ -52,8 +65,9 @@ resource "aws_instance" "netbox" {
    connection {
       type                = "ssh"
       private_key         = var.terraform_ssh_key
-      host                = aws_instance.netboxd.public_ip
+      host                = aws_instance.netbox.public_ip
       user                = "ubuntu"
       timeout             = "4m"
    }
  }
+}
