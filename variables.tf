@@ -1,6 +1,7 @@
 variable "access_key" {}
 variable "secret_key" {}
 variable "management_cidr_block" {}
+variable "terraform_ssh_key" {}
 variable "key_name" {
     default = "terraform"
 }
