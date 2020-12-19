@@ -21,22 +21,20 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "template_file" "deploy" {
+  template = file("cloudinit.tpl")
+
+}
+
 resource "aws_instance" "netbox_dev" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.netbox_dev.id]
+  user_data              = [data.template_file.deploy.rendered]
   tags = {
     Name = "netbox-dev"
-  }
-  connection {
-    type        = "ssh"
-    private_key = var.terraform_ssh_key
-    host        = aws_instance.netbox_dev.public_ip
-    user        = "ubuntu"
-    timeout     = "5m"
-  }
-  
+  }  
 }
 
 resource "null_resource" "netbox_config" {

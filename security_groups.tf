@@ -6,7 +6,7 @@ resource "aws_security_group" "netbox_dev" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.management_cidr_block, "0.0.0.0/0"]
+    cidr_blocks = [var.management_cidr_block]
   }
 
   # These hardcoded values come from the Terraform Cloud API described at https://www.terraform.io/docs/cloud/api/ip-ranges.html so the provisioner blocks can run
