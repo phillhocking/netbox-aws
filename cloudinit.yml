@@ -1,0 +1,54 @@
+#cloud-config
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+  - git
+
+# create the docker group
+groups:
+  - docker
+
+# Install Docker, for production, consider pinning to stable versions
+runcmd:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get update -y
+  - apt-get install -y docker-ce=5:20.10.1~3-0~ubuntu-bionic docker-ce-cli=5:20.10.1~3-0~ubuntu-bionic containerd.io=1.4.3-1 docker-compose=1.17.1-2
+  - systemctl start docker
+  - systemctl enable docker
+  - chown -R ubuntu:ubuntu /home/ubuntu
+  - bash /home/ubuntu/netbox.sh
+  
+# Add default auto created user to docker group
+system_info:
+  default_user:
+    name: ubuntu
+    groups: [docker]
+
+# Enable ipv4 forwarding, required on CIS hardened machines
+# Install netbox-docker and render docker-compose.override.yml
+write_files:
+  - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
+    content: |
+      net.ipv4.conf.all.forwarding=1
+  - path: /home/ubuntu/netbox.sh
+    permissions: '0755'
+    owner: ubuntu:ubuntu
+    content: |
+      #!/bin/bash
+
+      git clone -b release https://github.com/netbox-community/netbox-docker.git
+      cd netbox-docker
+      git checkout tags/0.27.0 -b 0.27.0-branch
+      tee docker-compose.override.yml <<EOF
+      version: '3.4'
+      services:
+        nginx:
+          ports:
+            - 80:8080
+      EOF
+      docker-compose pull
+      docker-compose up -d
