@@ -29,26 +29,19 @@ resource "aws_instance" "netbox_dev" {
   tags = {
     Name = "netbox-dev"
   }
+  connection {
+    type        = "ssh"
+    private_key = var.terraform_ssh_key
+    host        = aws_instance.netbox_dev.public_ip
+    user        = "ubuntu"
+    timeout     = "5m"
+  }
   provisioner "file" {
-    connection {
-      type        = "ssh"
-      private_key = var.terraform_ssh_key
-      host        = aws_instance.netbox_dev.public_ip
-      user        = "ubuntu"
-      timeout     = "5m"
-    }
     source      = "netbox.sh"
     destination = "/tmp/netbox.sh"
 
   }
   provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      private_key = var.terraform_ssh_key
-      host        = aws_instance.netbox_dev.public_ip
-      user        = "ubuntu"
-      timeout     = "5m"
-    }
     inline = [
       "chmod +x /tmp/netbox.sh",
       "/tmp/netbox.sh",
