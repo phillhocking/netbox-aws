@@ -35,9 +35,9 @@ write_files:
   - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
     content: |
       net.ipv4.conf.all.forwarding=1
-  - path: /home/ubuntu/netbox.sh
-    permissions: 0744
-    owner: ubuntu
+  - path: /tmp/netbox.sh
+    permissions: '0755'
+    owner: ubuntu:ubuntu
     content: |
       #!/bin/bash
 
