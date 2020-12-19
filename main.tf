@@ -58,7 +58,7 @@ resource "aws_instance" "netbox_dev" {
 }
 
 resource "null_resource" "netbox_config" {
-  depends_on = [aws_instance.netbox]
+  depends_on = [aws_instance.netbox_dev]
   connection {
     type        = "ssh"
     private_key = var.terraform_ssh_key
