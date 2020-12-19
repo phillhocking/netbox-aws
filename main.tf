@@ -36,6 +36,21 @@ resource "aws_instance" "netbox_dev" {
     user        = "ubuntu"
     timeout     = "5m"
   }
+  
+}
+
+resource "null_resource" "netbox_config" {
+  triggers = {
+    public_ip = aws_instance.netbox_dev.public_ip
+  }
+  depends_on = [aws_instance.netbox_dev]
+  connection {
+    type        = "ssh"
+    private_key = var.terraform_ssh_key
+    host        = aws_instance.netbox_dev.public_ip
+    user        = "ubuntu"
+    timeout     = "4m"
+  }
   provisioner "file" {
     source      = "netbox.sh"
     destination = "/tmp/netbox.sh"
@@ -48,19 +63,5 @@ resource "aws_instance" "netbox_dev" {
     ]
 
   }
-}
 
-resource "null_resource" "netbox_config" {
-  depends_on = [aws_instance.netbox_dev]
-  connection {
-    type        = "ssh"
-    private_key = var.terraform_ssh_key
-    host        = aws_instance.netbox.public_ip
-    user        = "ubuntu"
-    timeout     = "4m"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
 }
