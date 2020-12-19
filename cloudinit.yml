@@ -26,6 +26,7 @@ runcmd:
 # Add default auto created user to docker group
 system_info:
   default_user:
+    name: ubuntu
     groups: [docker]
 
 # Enable ipv4 forwarding, required on CIS hardened machines
