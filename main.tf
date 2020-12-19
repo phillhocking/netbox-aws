@@ -21,20 +21,34 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "netbox" {
+resource "aws_instance" "netbox_dev" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = var.key_name
-  vpc_security_group_ids = [aws_security_group.netbox-dev.id]
+  vpc_security_group_ids = [aws_security_group.netbox_dev.id]
   tags = {
     Name = "netbox-dev"
   }
   provisioner "file" {
+    connection {
+      type        = "ssh"
+      private_key = var.terraform_ssh_key
+      host        = aws_instance.netbox_dev.public_ip
+      user        = "ubuntu"
+      timeout     = "5m"
+    }
     source      = "netbox.sh"
     destination = "/tmp/netbox.sh"
 
   }
   provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      private_key = var.terraform_ssh_key
+      host        = aws_instance.netbox_dev.public_ip
+      user        = "ubuntu"
+      timeout     = "5m"
+    }
     inline = [
       "chmod +x /tmp/netbox.sh",
       "/tmp/netbox.sh",
