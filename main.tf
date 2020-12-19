@@ -22,7 +22,7 @@ data "aws_ami" "ubuntu" {
 }
 
 data "template_file" "deploy" {
-  template = file("cloudinit.tpl")
+  template = file("cloudinit.yml")
 
 }
 
