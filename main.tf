@@ -31,7 +31,7 @@ resource "aws_instance" "netbox_dev" {
   instance_type          = "t2.micro"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.netbox_dev.id]
-  user_data              = [data.template_file.deploy.rendered]
+  user_data              = data.template_file.deploy.rendered
   tags = {
     Name = "netbox-dev"
   }  
