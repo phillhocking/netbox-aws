@@ -1,4 +1,4 @@
-resource "aws_security_group" "netbox-dev" {
+resource "aws_security_group" "netbox_dev" {
   name        = "netbox-dev"
   description = "Allow SSH inbound , all HTTP inbound, and all outbound traffic"
 
