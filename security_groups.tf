@@ -1,5 +1,5 @@
-resource "aws_security_group" "netbox_dev" {
-  name        = "netbox-dev"
+resource "aws_security_group" "netbox_prod" {
+  name        = "netbox-prod"
   description = "Allow SSH inbound , all HTTP inbound, and all outbound traffic"
 
   ingress {
