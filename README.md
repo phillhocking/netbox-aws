@@ -2,7 +2,7 @@
 ## This repository is intended to facilitate installation of the popular NetBox DCIM/IPAM on an AWS EC2 instance using Terraform. 
 
 
-This repo is pinned to Ubuntu 18.04-amd64-server-20201211.1 and verified to work with Terraform 0.14.3. The [netbox-docker](https://github.com/netbox-community/netbox-docker) image is pinned to [1.0.2](https://github.com/netbox-community/netbox-docker/releases/tag/1.0.2) which was the latest release as of this writing. 
+This repo is pinned to Ubuntu 18.04-amd64-server-20201211.1 and verified to work with Terraform 0.14.6. The [netbox-docker](https://github.com/netbox-community/netbox-docker) image is pinned to [1.0.2](https://github.com/netbox-community/netbox-docker/releases/tag/1.0.2) which was the latest release as of this writing. 
 
 To summarize, this instantiates the Ubuntu EC2 instance, installs all the Docker dependencies (which all are pinned), pulls the [netbox-docker](https://github.com/netbox-community/netbox-docker) release via git, creates a `docker-compose.override.yml` file which exposes the Docker internal port `8080` on the worker container to port `80` to the internet, and then execute `docker-compose` resulting in a functioning NetBox IPAM  after several minutes of fetching the depends and setting up the various images called by `docker-compose`.
 
