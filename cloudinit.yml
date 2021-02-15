@@ -42,11 +42,11 @@ write_files:
 
       git clone -b release https://github.com/netbox-community/netbox-docker.git
       cd netbox-docker
-      git checkout tags/0.27.0 -b 0.27.0-branch
+      git checkout tags/1.0.0 -b 1.0.0-branch
       tee docker-compose.override.yml <<EOF
       version: '3.4'
       services:
-        nginx:
+        netbox:
           ports:
             - 80:8080
       EOF
