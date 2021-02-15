@@ -18,4 +18,4 @@ services:
       - 80:8080
 EOF
 sudo docker-compose pull
-sudo docker-compose up -d 
+sudo docker-compose up -d
